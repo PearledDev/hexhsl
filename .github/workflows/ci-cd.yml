@@ -13,11 +13,12 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    container:
-      image: swift:6.0
     steps:
       - uses: actions/checkout@v4
         name: Checkout Repository
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.0.3"
       - name: Run tests
         run: swift test
 
@@ -44,11 +45,12 @@ jobs:
     name: Build Linux
     needs: test
     runs-on: ubuntu-latest
-    container:
-      image: swift:6.0
     steps:
       - uses: actions/checkout@v4
         name: Checkout Repository
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.0.3"
       - name: Build Linux Binary
         run: |
           swift build -c release
@@ -68,10 +70,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checkout Repository
-      - name: Set up Swift on Windows
-        uses: compnerd/gha-setup-swift@main
+      - uses: SwiftyLab/setup-swift@latest
         with:
-          swift-version: 6.0
+          swift-version: "6.0.3"
       - name: Build Windows Binary
         shell: pwsh
         run: |
