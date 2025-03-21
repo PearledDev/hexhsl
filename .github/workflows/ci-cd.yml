@@ -14,10 +14,11 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     container:
-      image: swift:5.9
+      image: swift:6.0
     steps:
       - uses: actions/checkout@v4
-      - name: Run swift test
+        name: Checkout Repository
+      - name: Run tests
         run: swift test
 
   build-macos:
@@ -26,13 +27,14 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build
+        name: Checkout Code
+      - name: Build macOS Binary
         run: |
           swift build -c release
           mkdir -p dist/macos
           cp .build/release/hexhsl dist/macos/
 
-      - name: Upload macOS artifact
+      - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
           name: hexhsl-macos
@@ -43,16 +45,17 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     container:
-      image: swift:5.9
+      image: swift:6.0
     steps:
       - uses: actions/checkout@v4
-      - name: Build
+        name: Checkout Repository
+      - name: Build Linux Binary
         run: |
           swift build -c release
           mkdir -p dist/linux
           cp .build/release/hexhsl dist/linux/
 
-      - name: Upload Linux artifact
+      - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: hexhsl-linux
@@ -64,18 +67,19 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        name: Checkout Repository
       - name: Set up Swift on Windows
         uses: compnerd/gha-setup-swift@main
         with:
-          swift-version: 5.9.1
-      - name: Build
+          swift-version: 6.0
+      - name: Build Windows Binary
         shell: pwsh
         run: |
           swift build -c release
           mkdir dist/windows
           cp .build\release\hexhsl.exe dist\windows\
 
-      - name: Upload Windows artifact
+      - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
         with:
           name: hexhsl-windows
