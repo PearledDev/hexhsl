@@ -1,0 +1,42 @@
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+*.xcuserdatad/
+DerivedData/
+*.xcuserstate
+
+# macOS metadata
+.DS_Store
+
+# Logs
+*.log
+
+# Editor folders
+.vscode/
+.idea/
+
+# Binaries and output
+dist/
+*.o
+*.d
+*.exe
+*.out
+
+# SwiftPM sandbox/test artifacts
+.swiftpm/xcode/
+
+# Misc
+*.swp
+*.swo
+
+.DS_Store
+/.build
+
+/Packages
+

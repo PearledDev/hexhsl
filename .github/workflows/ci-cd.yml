@@ -1,0 +1,111 @@
+name: Build, Test and Release hexhsl
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*" # Create release when pushing a tag (ie v1.0.0)
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    container:
+      image: swift:5.9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run swift test
+        run: swift test
+
+  build-macos:
+    name: Build macOS
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          swift build -c release
+          mkdir -p dist/macos
+          cp .build/release/hexhsl dist/macos/
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hexhsl-macos
+          path: dist/macos/
+
+  build-linux:
+    name: Build Linux
+    needs: test
+    runs-on: ubuntu-latest
+    container:
+      image: swift:5.9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          swift build -c release
+          mkdir -p dist/linux
+          cp .build/release/hexhsl dist/linux/
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hexhsl-linux
+          path: dist/linux/
+
+  build-windows:
+    name: Build Windows
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Swift on Windows
+        uses: compnerd/gha-setup-swift@main
+        with:
+          swift-version: 5.9.1
+      - name: Build
+        shell: pwsh
+        run: |
+          swift build -c release
+          mkdir dist/windows
+          cp .build\release\hexhsl.exe dist\windows\
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hexhsl-windows
+          path: dist/windows/
+
+  release:
+    name: Release Binaries
+    needs: [build-macos, build-linux, build-windows]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: hexhsl-macos
+          path: dist/macos/
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: hexhsl-linux
+          path: dist/linux/
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: hexhsl-windows
+          path: dist/windows/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/macos/hexhsl
+            dist/linux/hexhsl
+            dist/windows/hexhsl.exe
