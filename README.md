@@ -27,10 +27,16 @@ $ hexhsl 336699
 1. [Download the latest release](https://github.com/PearledDev/hexhsl/releases)
 2. Paste the binary into a folder in your `$PATH`
 
-### Using Homebrew (only on macOS, Linux and WSL)
+### Using Homebrew (only on macOS arm64 & Linux x86_64)
 
 ```bash
 brew install PearledDev/ostools/hexhsl
+```
+
+### Windows (PowerShell as Administrator on x86_64)
+
+```powershell
+irm https://raw.githubusercontent.com/PearledDev/hexhsl/main/install-hexhsl.ps1 | iex
 ```
 
 ---
@@ -55,13 +61,14 @@ hexhsl 00ff00
 
 ---
 
-## 🔨 Building from source
+## 🔨 Building from source (macOS, Linux, Windows)
 
 ```bash
 git clone https://github.com/PearledDev/hexhsl.git
 cd hexhsl
 swift build -c release
 ```
+
 ---
 
 ## 📄 License
