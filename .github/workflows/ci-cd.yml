@@ -118,6 +118,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/macos/hexhsl
-            dist/linux/hexhsl
+            dist/macos/hexhsl-macos
+            dist/linux/hexhsl-linux
             dist/windows/hexhsl.exe
