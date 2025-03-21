@@ -57,4 +57,31 @@ final class ColorToHSLTests: XCTestCase {
         XCTAssertEqual(hsl.s, 50)
         XCTAssertEqual(hsl.l, 40)
     }
+    func testVersion() {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: productsDirectory.appendingPathComponent("hexhsl").path)
+        process.arguments = ["--version"]
+
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        
+        try! process.run()
+        process.waitUntilExit()
+        
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8)!.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        XCTAssertEqual(output, "hexhsl v0.1.1")
+    }
+    
+    private var productsDirectory: URL {
+        #if os(macOS)
+        for bundle in Bundle.allBundles where bundle.bundlePath.hasSuffix(".xctest") {
+            return bundle.bundleURL.deletingLastPathComponent()
+        }
+        fatalError("couldn't find the products directory")
+        #else
+        return Bundle.main.bundleURL
+        #endif
+    }
 }

@@ -1,7 +1,7 @@
 //
 //  main.swift
 //
-//  Created by Joseph on 21/03/2025.
+//  Created by Pearled on 21/03/2025.
 //
 
 import Foundation
@@ -45,8 +45,16 @@ func rgbToHSL(r: Double, g: Double, b: Double) -> (h: Int, s: Int, l: Int) {
 
 func main() {
     let args = CommandLine.arguments
+    
+    if args.count == 2 && args[1] == "--version" {
+        print("hexhsl v0.1.1")
+        exit(0)
+    }
+    
     guard args.count == 2 else {
+        print("hexhsl by Pearled")
         print("Usage: hexhsl <hex>")
+        print("       hexhsl --version")
         exit(1)
     }
 
