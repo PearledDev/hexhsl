@@ -28,9 +28,6 @@ dist/
 *.exe
 *.out
 
-# SwiftPM sandbox/test artifacts
-.swiftpm/xcode/
-
 # Misc
 *.swp
 *.swo
